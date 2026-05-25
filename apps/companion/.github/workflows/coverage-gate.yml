@@ -1,0 +1,107 @@
+name: Coverage Gate
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install web dependencies
+        working-directory: web
+        run: bun install
+
+      - name: Run web tests with coverage
+        working-directory: web
+        run: bun run test -- --coverage || true
+
+      - name: Install platform dependencies
+        working-directory: platform
+        run: bun install
+
+      - name: Run platform tests with coverage
+        working-directory: platform
+        run: bun run test -- --coverage || true
+
+      - name: Enforce 80% coverage on new / changed files
+        run: |
+          FAIL=0
+          THRESHOLD=80
+
+          # Helper function for checking coverage per project
+          check_coverage() {
+            local PROJECT="$1"
+            local SUBDIRS="${2:-server/ src/}"
+            local SUMMARY="$PROJECT/coverage/coverage-summary.json"
+
+            if [ ! -f "$SUMMARY" ]; then
+              echo "::warning::$PROJECT coverage-summary.json not found — skipping (test runner may have failed)."
+              return
+            fi
+
+            local DIFF_PATHS=""
+            for sub in $SUBDIRS; do
+              DIFF_PATHS="$DIFF_PATHS $PROJECT/$sub"
+            done
+
+            local CHANGED
+            CHANGED=$(git diff --name-only --diff-filter=ACM origin/main...HEAD -- $DIFF_PATHS \
+              | grep -E '\.(ts|tsx)$' \
+              | grep -v '\.test\.\|\.spec\.\|__mocks__\|test-setup\|session-types\.ts\|src/types\.ts\|agent-types\.ts\|server/index\.ts\|auth-schema\.ts\|event-bus-types\.ts\|metrics-types\.ts' || true)
+
+            if [ -z "$CHANGED" ]; then
+              echo "No new/changed source files in $PROJECT — nothing to gate."
+              return
+            fi
+
+            echo "=== Changed source files in $PROJECT ==="
+            echo "$CHANGED"
+            echo ""
+
+            for file in $CHANGED; do
+              local ABS_KEY
+              ABS_KEY="$(pwd)/${file}"
+              local LINES_PCT
+              LINES_PCT=$(jq -r --arg f "$ABS_KEY" '.[$f].lines.pct // empty' "$SUMMARY")
+              local DISPLAY="${file#$PROJECT/}"
+
+              if [ -z "$LINES_PCT" ]; then
+                echo "  $DISPLAY — no coverage data (not imported by any test)"
+                echo "  $DISPLAY — treated as 0% (below ${THRESHOLD}%)"
+                FAIL=1
+                continue
+              fi
+
+              local BELOW
+              BELOW=$(awk "BEGIN { print ($LINES_PCT < $THRESHOLD) ? 1 : 0 }")
+              if [ "$BELOW" = "1" ]; then
+                echo "  $DISPLAY — ${LINES_PCT}% lines covered (threshold: ${THRESHOLD}%)"
+                FAIL=1
+              else
+                echo "  $DISPLAY — ${LINES_PCT}% lines covered"
+              fi
+            done
+          }
+
+          check_coverage "web"
+          echo ""
+          # Platform: only gate server code (frontend is scaffolding for now)
+          check_coverage "platform" "server/"
+
+          echo ""
+          if [ "$FAIL" = "1" ]; then
+            echo "::error::Coverage gate failed — one or more changed files are below ${THRESHOLD}% line coverage."
+            echo "Add tests for the files listed above to bring them above the threshold."
+            exit 1
+          else
+            echo "All changed files meet the ${THRESHOLD}% line coverage threshold."
+          fi

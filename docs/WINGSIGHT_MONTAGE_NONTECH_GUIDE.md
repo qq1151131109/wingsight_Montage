@@ -35,7 +35,7 @@ make preflight
 
 ## wingsight_montage 启动方式
 
-本机已经安装 Bun，并把 wingsight_montage 安装为后台服务。浏览器打开：
+本机已经安装 Bun，并在 `apps/companion` 使用项目内 The Companion 源码。浏览器打开：
 
 ```text
 http://localhost:3456
@@ -49,7 +49,7 @@ scripts/open-user-session.sh
 
 这个脚本每运行一次，默认创建一个新的独立视频任务会话。它会自动：
 
-1. 启动 wingsight_montage；
+1. 启动项目内 `apps/companion` 源码版 Companion；
 2. 创建当前项目的新会话；
 3. 使用 Codex backend；
 4. 固定工作目录为 `/home/shenglin/Desktop/wingsight_Montage`；
@@ -76,6 +76,15 @@ scripts/open-user-session.sh --reuse
 ```bash
 scripts/start-wingsight_montage.sh start
 ```
+
+如果页面看不到最新 UI，先确认没有旧的全局 Companion 服务占用端口：
+
+```bash
+systemctl --user status the-companion.service
+scripts/start-wingsight_montage.sh status
+```
+
+当前推荐只使用项目脚本管理服务，不再使用全局 `the-companion.service`。
 
 查看状态：
 

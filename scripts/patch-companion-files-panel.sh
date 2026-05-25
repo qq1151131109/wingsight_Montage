@@ -568,12 +568,12 @@ panel_js.write_text(f'''(() => {{
       }}
       if (aria === "Toggle AI validation settings" || text === "auto") el.classList.add(HIDDEN_CLASS);
       if (text.startsWith("terminal /bin/") || text.startsWith("terminal/bin/")) el.classList.add(HIDDEN_CLASS);
-      if (
+      const isProtocolNoise =
         text.includes("codex protocol drift") ||
         text.includes("companion may need an update") ||
         text.includes("codex initialization failed") ||
-        text.includes("unsupported incoming notification")
-      ) {{
+        text.includes("unsupported incoming notification");
+      if (isProtocolNoise && text.length < 500 && !el.closest("#root > div")) {{
         el.classList.add(HIDDEN_CLASS);
       }}
     }}
@@ -647,7 +647,7 @@ panel_js.write_text(f'''(() => {{
 
 html = index_html.read_text()
 html = re.sub(r"\s*<script src=\"/wingsight-files-panel\.js(?:\?v=\d+)?\"></script>\s*", "\n", html)
-script_tag = '<script src="/wingsight-files-panel.js?v=3"></script>'
+script_tag = '<script src="/wingsight-files-panel.js?v=4"></script>'
 html = html.replace("</body>", f"    {script_tag}\n  </body>")
 index_html.write_text(html)
 PY

@@ -6,6 +6,7 @@ PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 SESSION_CLI="$SCRIPT_DIR/start-wingsight_montage.sh"
 SESSION_NAME="${WINGSIGHT_MONTAGE_SESSION_NAME:-wingsight_montage 视频助手}"
 BACKEND="${WINGSIGHT_MONTAGE_BACKEND:-codex}"
+MODEL="${WINGSIGHT_MONTAGE_MODEL:-gpt-5.5}"
 PERMISSION_MODE="${WINGSIGHT_MONTAGE_PERMISSION:-bypassPermissions}"
 REUSE_SESSION=0
 PYTHON_BIN="$PROJECT_DIR/.venv/bin/python"
@@ -59,6 +60,7 @@ fi
 if [ -z "$SESSION_ID" ]; then
   CREATE_OUTPUT="$("$SESSION_CLI" sessions create \
     --backend "$BACKEND" \
+    --model "$MODEL" \
     --cwd "$PROJECT_DIR" \
     --permission-mode "$PERMISSION_MODE")"
   SESSION_ID="$(printf '%s' "$CREATE_OUTPUT" | "$PYTHON_BIN" -c 'import json,sys; print(json.load(sys.stdin)["sessionId"])')"

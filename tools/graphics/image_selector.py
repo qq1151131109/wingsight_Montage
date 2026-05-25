@@ -284,13 +284,17 @@ class ImageSelector(BaseTool):
             or inputs.get("image_urls")
             or inputs.get("image_paths")
         )
-        if not wants_edit:
-            return candidates
-
         filtered: list[BaseTool] = []
         for tool in candidates:
             props = getattr(tool, "input_schema", {}).get("properties", {})
             supports = getattr(tool, "supports", {})
+            capabilities = set(getattr(tool, "capabilities", []) or [])
+
+            if not wants_edit:
+                if "text_to_image" in capabilities or "generate_image" in capabilities or "stock_image" in capabilities:
+                    filtered.append(tool)
+                continue
+
             if supports.get("image_edit") or any(
                 key in props for key in ("image", "images", "image_url", "image_path", "image_urls", "image_paths")
             ):

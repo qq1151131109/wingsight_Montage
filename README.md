@@ -160,6 +160,7 @@ This repo is built for agentic operation. If you're an OpenClaw-style agent, her
 
 # Image + video gateway:
 FAL_KEY=your-key               # FLUX images + Google Veo, Kling, MiniMax video + Recraft images
+RUNNINGHUB_API_KEY=your-key    # RunningHub standard image/video models
 
 # Free stock media:
 PEXELS_API_KEY=your-key        # Free stock footage and images

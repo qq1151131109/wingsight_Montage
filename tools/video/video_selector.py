@@ -56,7 +56,7 @@ class VideoSelector(BaseTool):
             },
             "aspect_ratio": {
                 "type": "string",
-                "enum": ["16:9", "9:16", "1:1"],
+                "enum": ["16:9", "9:16", "1:1", "2:3", "3:2"],
                 "default": "16:9",
                 "description": "Video aspect ratio. Passed through to the selected provider.",
             },
@@ -167,13 +167,22 @@ class VideoSelector(BaseTool):
         # Auto-resolve reference_image_path to a URL for providers that need it
         if adapted.get("operation") == "image_to_video" and adapted.get("reference_image_path"):
             tool_props = getattr(tool, "input_schema", {}).get("properties", {})
-            # If the provider uses image_url (not reference_image_path), upload and convert
-            if "image_url" in tool_props and "image_url" not in adapted:
+            if "reference_image_path" in tool_props:
+                pass
+            elif "image_path" in tool_props and "image_path" not in adapted:
+                adapted["image_path"] = adapted["reference_image_path"]
+            # If the provider only uses image_url, upload and convert.
+            elif "image_url" in tool_props and "image_url" not in adapted:
                 try:
                     from tools.video._shared import upload_image_fal
                     adapted["image_url"] = upload_image_fal(adapted["reference_image_path"])
                 except Exception as e:
                     return ToolResult(success=False, error=f"Failed to upload reference image: {e}")
+
+        if adapted.get("operation") == "image_to_video" and adapted.get("reference_image_url"):
+            tool_props = getattr(tool, "input_schema", {}).get("properties", {})
+            if "reference_image_url" not in tool_props and "image_url" in tool_props and "image_url" not in adapted:
+                adapted["image_url"] = adapted["reference_image_url"]
 
         result = tool.execute(adapted)
         if result.success:

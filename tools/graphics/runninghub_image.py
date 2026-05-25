@@ -52,8 +52,11 @@ class RunningHubImage(BaseTool):
         "multiple_reference_images": True,
         "aspect_ratio": True,
         "resolution": True,
+        "text_to_image": True,
+        "model_aliases": ["nano banana", "nano banana v2"],
     }
     best_for = [
+        "Nano Banana v2 image generation/editing via RunningHub",
         "image-to-image style transfer through RunningHub standard models",
         "multi-reference image transformation with up to 10 input images",
         "Chinese prompt workflows and RH-hosted ComfyUI model access",
@@ -74,6 +77,7 @@ class RunningHubImage(BaseTool):
                 "type": "string",
                 "enum": ["rhart-image-n-g31-flash"],
                 "default": "rhart-image-n-g31-flash",
+                "description": "RunningHub model id for Nano Banana v2 image generation/editing.",
             },
             "image_url": {"type": "string", "description": "Single source image URL"},
             "image_path": {"type": "string", "description": "Single local source image path; uploaded to RunningHub"},
@@ -154,19 +158,7 @@ class RunningHubImage(BaseTool):
         return 0.0
 
     def _build_payload(self, inputs: dict[str, Any], client: RunningHubClient) -> dict[str, Any]:
-        image_urls = collect_media_urls(
-            client,
-            url_keys=["image_url", "image_urls", "imageUrls"],
-            path_keys=["image_path", "image_paths"],
-            inputs=inputs,
-        )
-        if not image_urls:
-            raise ValueError("RunningHub image-to-image requires image_url/image_path or image_urls/image_paths")
-        if len(image_urls) > 10:
-            raise ValueError(f"RunningHub image-to-image accepts at most 10 images; got {len(image_urls)}")
-
         payload: dict[str, Any] = {
-            "imageUrls": image_urls,
             "prompt": inputs["prompt"],
             "resolution": inputs.get("resolution", "1k"),
         }
@@ -176,6 +168,17 @@ class RunningHubImage(BaseTool):
             payload["aspectRatio"] = aspect_ratio
         if webhook_url:
             payload["webhookUrl"] = webhook_url
+
+        image_urls = collect_media_urls(
+            client,
+            url_keys=["image_url", "image_urls", "imageUrls"],
+            path_keys=["image_path", "image_paths"],
+            inputs=inputs,
+        )
+        if image_urls:
+            if len(image_urls) > 10:
+                raise ValueError(f"RunningHub image-to-image accepts at most 10 images; got {len(image_urls)}")
+            payload["imageUrls"] = image_urls
         return payload
 
     @staticmethod
@@ -203,10 +206,10 @@ class RunningHubImage(BaseTool):
         start = time.time()
         client = RunningHubClient(api_key)
         model = inputs.get("model", "rhart-image-n-g31-flash")
-        endpoint = f"{model}/image-to-image"
 
         try:
             payload = self._build_payload(inputs, client)
+            endpoint = f"{model}/image-to-image" if payload.get("imageUrls") else f"{model}/text-to-image"
             submitted = client.submit(endpoint, payload)
             task_id = submitted.get("taskId")
             if not task_id:
@@ -237,7 +240,8 @@ class RunningHubImage(BaseTool):
                 "provider": "runninghub",
                 "model": model,
                 "prompt": inputs["prompt"],
-                "generation_mode": "edit",
+                "generation_mode": "edit" if final.get("results") and payload.get("imageUrls") else "generate",
+                "operation": "image_to_image" if payload.get("imageUrls") else "text_to_image",
                 "task_id": str(task_id),
                 "status": final.get("status"),
                 "output": artifacts[0],

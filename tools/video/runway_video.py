@@ -85,7 +85,7 @@ class RunwayVideo(BaseTool):
         "professional video production",
     ]
     not_good_for = ["budget projects", "offline generation", "very long clips"]
-    fallback_tools = ["seedance_video", "seedance_replicate", "kling_video", "veo_video", "minimax_video", "wan_video"]
+    fallback_tools = ["seedance_fgpro", "seedance_video", "seedance_replicate", "kling_video", "veo_video", "minimax_video", "wan_video"]
     quality_score = 0.9
 
     input_schema = {

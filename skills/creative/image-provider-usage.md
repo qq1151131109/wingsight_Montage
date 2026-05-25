@@ -13,6 +13,7 @@
 | `grok_image` | Grok Imagine Image (xAI) | $0.02/output + $0.002/input edit image | ~5-15s | Image edits, style transfer, multi-image compositing |
 | `openai_image` | GPT Image 1 (OpenAI) | ~$0.01-0.17 | ~5-15s | Complex instructions, text in images, multi-element |
 | `recraft_image` | Recraft V4 via fal.ai | ~$0.04-0.25 | ~5-10s | Logos, SVG vectors, brand assets, text rendering (see caveat below) |
+| `runninghub_image` | RunningHub Nano Banana v2 / RHArt image edit | Wallet/RH coin billing | Async | Image-to-image, style transfer, multi-reference transformations; requires source image(s) |
 | `local_diffusion` | Stable Diffusion (local) | Free | ~30s+ | Offline, privacy, free |
 | `image_gen` | Multi (legacy, deprecated) | Varies | Varies | **Deprecated** — use `image_selector` or per-provider tools |
 
@@ -51,6 +52,11 @@
 ### Recraft V4 via fal.ai
 - **`style` parameter causes 422 errors** (as of 2026-04). The `style` enum values (`digital_illustration`, `realistic_image`, etc.) are rejected by fal.ai's Recraft V4 endpoint. **Workaround:** encode style direction in the prompt text instead (e.g. "digital illustration of a tooth cross-section" rather than `style="digital_illustration"`). The `image_size` and `colors` parameters work fine.
 - **Text rendering is unreliable for exact business names.** Recraft (like all AI image models) may hallucinate wrong text. For any scene where text must be verbatim (CTA screens, business names, phone numbers), use Remotion `text_card` instead of generating an image with text.
+
+### RunningHub image route
+- `runninghub_image` is configured by `RUNNINGHUB_API_KEY`. User-facing aliases include "Nano Banana" and "Nano Banana v2"; the internal model id is `rhart-image-n-g31-flash`.
+- It is an edit/image-to-image route, not a pure text-to-image route.
+- Use it when you have `image_path`, `image_url`, or multiple reference images. For pure prompt-only images, let `image_selector` choose another available text-to-image provider.
 
 ## Cost-Quality Tradeoff
 

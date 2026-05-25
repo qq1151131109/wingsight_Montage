@@ -39,12 +39,15 @@ GOOGLE_API_KEY=              # Google TTS + Google Imagen
 ELEVENLABS_API_KEY=          # TTS, music, sound effects (10K chars/month free)
 OPENAI_API_KEY=              # OpenAI TTS + DALL-E 3 images
 XAI_API_KEY=                 # xAI Grok image generation/editing + Grok video generation
+DASHSCOPE_API_KEY=           # Alibaba Cloud Model Studio / Bailian CosyVoice TTS
 DOUBAO_SPEECH_API_KEY=       # Volcengine Doubao Speech TTS (strong Mandarin narration)
 DOUBAO_SPEECH_VOICE_TYPE=    # Default Doubao speaker/voice type
 
 # MULTI-MODEL GATEWAY (one key, 6+ tools)
 FAL_KEY=                     # FLUX, Recraft, Kling, Veo, MiniMax video
 RUNNINGHUB_API_KEY=          # RunningHub standard image/video models
+FGPRO_SEEDANCE_API_KEY=      # FGPro relay for ByteDance Seedance 2.0 video
+FGPRO_SEEDANCE_TASKS_URL=    # Optional Seedance native tasks endpoint override
 
 # VIDEO
 HEYGEN_API_KEY=              # HeyGen avatar video gateway
@@ -99,8 +102,13 @@ wingsight_montage now uses those published rates in the Grok tool estimators.
 
 > **Broad single-key coverage.** One API key unlocks image and video providers across multiple models.
 
-**Tools unlocked:** `flux_image`, `recraft_image`, `kling_video`, `veo_video`, `minimax_video`
+**Tools unlocked:** `flux_image`, `recraft_image`, `kling_video`, `veo_video`, `minimax_video`, `seedance_video`
 **Env var:** `FAL_KEY`
+
+Runtime naming note: `seedance_video` is the fal.ai gateway only. If `FAL_KEY` is unset,
+`seedance_video` will correctly report `unavailable` even when another Seedance gateway is
+configured. The current DeepVS/FGPro relay path is `seedance_fgpro`, backed by
+`FGPRO_SEEDANCE_API_KEY`.
 
 #### Setup
 
@@ -205,6 +213,32 @@ Start with `speech_rate: 0` for natural Mandarin delivery. If the approved forma
 #### Pricing
 
 Doubao Speech 2.0 is billed by character package or usage in Volcengine. wingsight_montage estimates cost from text length and prefers provider-returned usage metadata when available.
+
+---
+
+### Alibaba Cloud Bailian — Qwen TTS
+
+> **Configured Mandarin TTS route on this machine.** Bailian is exposed through DashScope and is useful for Chinese narration when a local China-cloud provider is preferred.
+
+**Tool unlocked:** `aliyun_bailian_tts`
+**Env var:** `DASHSCOPE_API_KEY`
+
+Runtime naming note: `aliyun_bailian_tts` is the Alibaba Cloud Model Studio / Bailian TTS provider. It accepts `DASHSCOPE_API_KEY` first, with `ALIYUN_BAILIAN_API_KEY` and `BAILIAN_API_KEY` as aliases. The default model is `qwen3-tts-flash`, default voice is `Cherry`; do not assume ElevenLabs/OpenAI keys are needed for this route.
+
+Implementation note: Qwen3 TTS models use `dashscope.MultiModalConversation.call`; CosyVoice models use `dashscope.audio.tts_v2.SpeechSynthesizer`. If Bailian fails, check SDK compatibility and installed `dashscope` before treating it as a content or prompt problem.
+
+---
+
+### RunningHub — Image and Video Gateway
+
+> **Configured generated-media route on this machine.** RunningHub covers standard model video generation and image transformation through a shared wallet/API key.
+
+**Tools unlocked:** `runninghub_video`, `runninghub_image`
+**Env var:** `RUNNINGHUB_API_KEY`
+
+Runtime naming note: `runninghub_video` supports true `text_to_video` and `image_to_video` through RunningHub RHArt video models. `runninghub_image` is the RunningHub image route users may call "Nano Banana" or "Nano Banana v2"; internally it uses model id `rhart-image-n-g31-flash`. It currently supports image edit/image-to-image/style transfer and requires at least one source image; do not treat it as pure text-to-image even though it lives under `image_generation`.
+
+Selector note: use `video_selector` for text-to-video work and allow it to consider `runninghub_video`. Use `image_selector` with `generation_mode="edit"` or call `runninghub_image` directly only when starting from source images.
 
 ---
 
@@ -725,8 +759,10 @@ These tools require only FFmpeg or Python packages — no GPU, no API key.
 | **Piper** | — (install only) | `piper_tts` | Free |
 | **Google** | `GOOGLE_API_KEY` | `google_tts`, `google_imagen` | Free tier + paid |
 | **ElevenLabs** | `ELEVENLABS_API_KEY` | `elevenlabs_tts`, `music_gen` | Free tier + paid |
+| **Alibaba Cloud Bailian** | `DASHSCOPE_API_KEY` | `aliyun_bailian_tts` | Paid/credit-based |
 | **fal.ai** | `FAL_KEY` | `flux_image`, `recraft_image`, `kling_video`, `veo_video`, `minimax_video` | Pay-as-you-go |
 | **RunningHub** | `RUNNINGHUB_API_KEY` | `runninghub_image`, `runninghub_video` | Wallet/RH coin billing |
+| **FGPro Seedance Relay** | `FGPRO_SEEDANCE_API_KEY` | `seedance_fgpro` | Relay/account billing |
 | **OpenAI** | `OPENAI_API_KEY` | `openai_tts`, `openai_image` | Paid only |
 | **xAI** | `XAI_API_KEY` | `grok_image`, `grok_video` | Paid only |
 | **Runway** | `RUNWAY_API_KEY` | `runway_video` | Free trial + paid |

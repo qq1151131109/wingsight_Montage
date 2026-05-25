@@ -1,20 +1,23 @@
 ---
 name: seedance-2-0
 description: |
-  Generate cinematic clips with ByteDance Seedance 2.0 — the preferred premium video model in OpenMontage when a paid gateway is configured. Use when: (1) producing trailers, teasers, hype edits, or premium cinematic clips, (2) needing native synchronized audio (speech, SFX, ambience) in a single pass, (3) needing multi-shot cuts inside one generation, (4) needing director-level camera control, (5) needing lip-sync from quoted dialogue in the prompt, (6) needing reference-conditioned generation with up to 9 images + 3 video clips + 3 audio clips, (7) wanting consistent character identity across shots. Accessible via fal.ai (`seedance_video` tool), HeyGen (Video Agent / Avatar Shots), Replicate, Runway (Enterprise, non-US), Freepik, BytePlus ModelArk, Higgsfield, Pollo, and other aggregators.
+  Generate cinematic clips with ByteDance Seedance 2.0 — the preferred premium video model in OpenMontage when a paid gateway is configured. Use when: (1) producing trailers, teasers, hype edits, or premium cinematic clips, (2) needing native synchronized audio (speech, SFX, ambience) in a single pass, (3) needing multi-shot cuts inside one generation, (4) needing director-level camera control, (5) needing lip-sync from quoted dialogue in the prompt, (6) needing reference-conditioned generation with up to 9 images + 3 video clips + 3 audio clips, (7) wanting consistent character identity across shots. Route through `video_selector` with `preferred_provider="seedance"`; concrete gateways include `seedance_fgpro` (DeepVS/FGPro), `seedance_video` (fal.ai), Replicate, Runway, Higgsfield, and other aggregators.
 allowed-tools: Bash, Read, Write
 metadata:
   openclaw:
     requires:
       env_any:
         - FAL_KEY
+        - FGPRO_SEEDANCE_API_KEY
         - HEYGEN_API_KEY
         - REPLICATE_API_TOKEN
 ---
 
 # Seedance 2.0 (ByteDance)
 
-Seedance 2.0 is the ByteDance Seed team's unified multimodal video+audio model (released Feb 2026, globally available via partner APIs April 2026). It is the **preferred premium default** for cinematic, trailer, teaser, and motion-led work inside OpenMontage whenever any supporting gateway is configured. OpenMontage wraps four gateways directly (`seedance_video` → fal.ai, `seedance_replicate` → Replicate, `runway_video` with `model="seedance_2.0"` → Runway, `higgsfield_video` with `model="seedance_2.0"` → Higgsfield); BytePlus / Freepik / HeyGen-Video-Agent wrappers are on the roadmap. The scoring engine deduplicates by `provider="seedance"` so whichever gateway the user has configured wins automatically — agents should pass `preferred_provider="seedance"` to `video_selector` (or let the scorer pick) rather than routing to a specific gateway by name.
+Seedance 2.0 is the ByteDance Seed team's unified multimodal video+audio model (released Feb 2026, globally available via partner APIs April 2026). It is the **preferred premium default** for cinematic, trailer, teaser, and motion-led work inside OpenMontage whenever any supporting gateway is configured. OpenMontage wraps several gateways directly (`seedance_video` → fal.ai, `seedance_fgpro` → DeepVS/FGPro relay, `seedance_replicate` → Replicate, `runway_video` with `model="seedance_2.0"` → Runway, `higgsfield_video` with `model="seedance_2.0"` → Higgsfield); BytePlus / Freepik / HeyGen-Video-Agent wrappers are on the roadmap. The scoring engine deduplicates by `provider="seedance"` so whichever gateway the user has configured wins automatically — agents should pass `preferred_provider="seedance"` to `video_selector` (or let the scorer pick) rather than routing to a specific gateway by name.
+
+Runtime naming note: `seedance_video` is not a generic Seedance label; it is the fal.ai tool and requires `FAL_KEY`. If `FAL_KEY` is unset, `seedance_video` being unavailable is expected. The current DeepVS/FGPro relay route is `seedance_fgpro` and requires `FGPRO_SEEDANCE_API_KEY`.
 
 ## Why it is the OpenMontage premium default
 
@@ -36,7 +39,8 @@ Switch away only for a specific reason: strict budget (use the `fast` variant or
 
 | Surface | Env | OpenMontage tool | Status | Notes |
 |---|---|---|---|---|
-| **fal.ai** (primary) | `FAL_KEY` | `seedance_video` | ✅ wrapped | Model IDs below. Supports T2V, I2V, reference-to-video; `standard` and `fast` variants. Default in OpenMontage. |
+| **fal.ai** | `FAL_KEY` | `seedance_video` | ✅ wrapped | Model IDs below. Supports T2V, I2V, reference-to-video; `standard` and `fast` variants. This is one Seedance gateway, not the generic Seedance selector. |
+| **DeepVS / FGPro relay** | `FGPRO_SEEDANCE_API_KEY` | `seedance_fgpro` | ✅ wrapped | Native `/api/v3/contents/generations/tasks` task API. This is the configured route on the current machine. |
 | **Replicate** | `REPLICATE_API_TOKEN` | `seedance_replicate` | ✅ wrapped | `bytedance/seedance-2.0` + `bytedance/seedance-2.0-fast`. Standard Replicate prediction API. |
 | **Runway** | `RUNWAY_API_KEY` | `runway_video` (model: `seedance_2.0`) | ✅ wrapped | Third-party Seedance 2.0 model inside Runway. **Unlimited/Enterprise plans, non-US only**. Selected via `model` param. |
 | **Higgsfield** | `HIGGSFIELD_API_KEY` + `_SECRET` | `higgsfield_video` (model: `seedance_2.0`) | ✅ wrapped | Seedance 2.0 is the default model on this tool. Emphasis on character identity + long-form chaining. |
@@ -78,13 +82,13 @@ result = selector.execute({
 })
 ```
 
-Direct call to the provider tool (only when you must bypass the selector):
+Direct call to a concrete provider tool (only when you must bypass the selector). Pick the gateway that is actually configured; on the current machine that is usually `seedance_fgpro`, not `seedance_video`:
 
 ```python
-seedance = registry.get("seedance_video")
+seedance = registry.get("seedance_fgpro")
 seedance.execute({
     "prompt": PROMPT,
-    "model_variant": "standard",   # "standard" or "fast"
+    "model_variant": "fast",       # "standard" or "fast"; provider-dependent defaults
     "operation": "text_to_video",
     "aspect_ratio": "21:9",
     "duration": "10",

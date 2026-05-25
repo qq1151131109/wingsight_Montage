@@ -383,10 +383,13 @@ All config is validated via Pydantic models in `lib/config_model.py`.
 | Variable | Used By | Purpose |
 |----------|---------|---------|
 | `ELEVENLABS_API_KEY` | elevenlabs_tts, music_gen | TTS, music, sound effects |
+| `DASHSCOPE_API_KEY` | aliyun_bailian_tts | Alibaba Cloud Model Studio / Bailian Qwen3 TTS; default model `qwen3-tts-flash` |
 | `OPENAI_API_KEY` | openai_tts, openai_image | TTS fallback, DALL-E 3 |
 | `XAI_API_KEY` | grok_image, grok_video | Grok image editing/generation, Grok video generation |
 | `FAL_KEY` | flux_image, kling_video, veo_video, minimax_video, recraft_image | fal.ai hosted models (FLUX, Veo, Kling, MiniMax, Recraft) |
-| `RUNNINGHUB_API_KEY` | runninghub_image, runninghub_video | RunningHub standard image/video model API |
+| `RUNNINGHUB_API_KEY` | runninghub_image, runninghub_video | RunningHub standard image/video model API; video supports T2V/I2V, image route is Nano Banana v2 image-to-image/edit |
+| `FGPRO_SEEDANCE_API_KEY` | seedance_fgpro | FGPro relay for ByteDance Seedance 2.0 video generation |
+| `FGPRO_SEEDANCE_TASKS_URL` | seedance_fgpro | Optional Seedance native tasks endpoint override |
 | `HEYGEN_API_KEY` | heygen_video | Multi-provider video generation |
 | `PEXELS_API_KEY` | pexels_image, pexels_video | Stock media |
 | `PIXABAY_API_KEY` | pixabay_image, pixabay_video | Stock media |

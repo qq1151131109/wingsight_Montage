@@ -26,7 +26,10 @@ HEYGEN_PROVIDERS = {
     # NOTE: HeyGen's `seedance_lite` / `seedance_pro` provider strings map to
     # Seedance 1.x. Seedance 2.0 on HeyGen is exposed through Video Agent and
     # Avatar Shots endpoints, NOT via the workflow provider parameter. For 2.0
-    # access today, use `seedance_video` (fal.ai) or `seedance_replicate`.
+    # access today, route through `video_selector` with
+    # preferred_provider="seedance" so the configured gateway wins. Concrete
+    # wrappers include `seedance_fgpro`, `seedance_video` (fal.ai), and
+    # `seedance_replicate`.
     "seedance_lite": {"name": "Seedance Lite (1.x)", "quality": "medium", "speed": "fast"},
     "seedance_pro": {"name": "Seedance Pro (1.x)", "quality": "high", "speed": "medium"},
     "ltx_distilled": {"name": "LTX Distilled", "quality": "low", "speed": "fastest"},

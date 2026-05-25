@@ -4,9 +4,10 @@ Replicate hosts ByteDance's published Seedance 2.0 models:
   - bytedance/seedance-2.0        (standard)
   - bytedance/seedance-2.0-fast   (fast tier)
 
-Same model family as the fal.ai path (tools/video/seedance_video.py) —
-if you have both FAL_KEY and REPLICATE_API_TOKEN the scoring engine
-deduplicates by provider=seedance and picks whichever registers first.
+Same model family as the other Seedance paths. Route user-facing requests
+through video_selector with preferred_provider="seedance" so the available
+gateway wins (`seedance_fgpro`, `seedance_video` for fal.ai, or this
+Replicate wrapper).
 """
 
 from __future__ import annotations
@@ -69,7 +70,7 @@ class SeedanceReplicate(BaseTool):
         "consistent character identity across shots",
     ]
     not_good_for = ["offline generation", "budget-constrained projects"]
-    fallback_tools = ["seedance_video", "veo_video", "kling_video", "minimax_video"]
+    fallback_tools = ["seedance_fgpro", "seedance_video", "veo_video", "kling_video", "minimax_video"]
     quality_score = 0.95
 
     input_schema = {

@@ -61,7 +61,7 @@ class RunningHubVideo(BaseTool):
         "720p or 480p generated video via RunningHub wallet billing",
     ]
     not_good_for = ["offline generation", "native synchronized audio guarantees"]
-    fallback_tools = ["seedance_video", "kling_video", "minimax_video"]
+    fallback_tools = ["seedance_fgpro", "seedance_video", "kling_video", "minimax_video"]
 
     input_schema = {
         "type": "object",

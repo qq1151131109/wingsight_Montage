@@ -27,9 +27,11 @@ from tools.base_tool import ToolTier
 from tools.audio.music_gen import MusicGen
 from tools.tool_registry import ToolRegistry
 from tools.audio.elevenlabs_tts import ElevenLabsTTS
+from tools.audio.aliyun_bailian_tts import AliyunBailianTTS
 from tools.audio.openai_tts import OpenAITTS
 from tools.audio.piper_tts import PiperTTS
 from tools.audio.tts_selector import TTSSelector
+from tools.video.seedance_fgpro import SeedanceFGPro
 
 
 # ---- TTS Provider Tools ----
@@ -102,13 +104,14 @@ class TestNewToolsRegistry:
 
     def test_voice_tier_tools(self):
         reg = ToolRegistry()
+        reg.register(AliyunBailianTTS())
         reg.register(ElevenLabsTTS())
         reg.register(OpenAITTS())
         reg.register(PiperTTS())
         voice_tools = reg.get_by_tier(ToolTier.VOICE)
-        assert len(voice_tools) == 3
+        assert len(voice_tools) == 4
         names = {t.name for t in voice_tools}
-        assert names == {"elevenlabs_tts", "openai_tts", "piper_tts"}
+        assert names == {"aliyun_bailian_tts", "elevenlabs_tts", "openai_tts", "piper_tts"}
 
 
 class TestCapabilityMetadata:
@@ -123,11 +126,13 @@ class TestCapabilityMetadata:
 
     def test_provider_specific_tts_tools_register(self):
         reg = ToolRegistry()
+        reg.register(AliyunBailianTTS())
         reg.register(ElevenLabsTTS())
         reg.register(OpenAITTS())
         reg.register(PiperTTS())
         reg.register(TTSSelector())
         assert {tool.name for tool in reg.get_by_capability("tts")} == {
+            "aliyun_bailian_tts",
             "elevenlabs_tts",
             "openai_tts",
             "piper_tts",
@@ -137,13 +142,23 @@ class TestCapabilityMetadata:
 
     def test_registry_catalog_views(self):
         reg = ToolRegistry()
+        reg.register(AliyunBailianTTS())
         reg.register(ElevenLabsTTS())
         reg.register(OpenAITTS())
         reg.register(PiperTTS())
         catalog = reg.capability_catalog()
         assert "tts" in catalog
         providers = {item["provider"] for item in catalog["tts"] if item["provider"] != "selector"}
-        assert providers == {"elevenlabs", "google_tts", "openai", "piper"}
+        assert providers == {"aliyun_bailian", "doubao", "elevenlabs", "google_tts", "openai", "piper"}
+
+    def test_fgpro_seedance_video_tool_contract(self):
+        tool = SeedanceFGPro()
+        info = tool.get_info()
+        assert info["name"] == "seedance_fgpro"
+        assert info["capability"] == "video_generation"
+        assert info["provider"] == "seedance"
+        assert "text_to_video" in info["capabilities"]
+        assert "image_to_video" in info["capabilities"]
 
 
 # ---- Animated Explainer Pipeline ----

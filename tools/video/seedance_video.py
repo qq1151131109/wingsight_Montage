@@ -1,5 +1,10 @@
 """Seedance 2.0 (ByteDance) video generation via fal.ai API.
 
+This concrete tool is fal.ai only. It intentionally requires FAL_KEY /
+FAL_AI_API_KEY and should not be treated as the generic Seedance route.
+Use video_selector with preferred_provider="seedance" when any Seedance
+gateway is acceptable.
+
 Best for cinematic clips with native audio, director-level camera control,
 and lip-sync from quoted dialogue in prompts.
 """

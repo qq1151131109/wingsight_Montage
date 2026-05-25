@@ -5,12 +5,10 @@ Targets public-domain film and home-movie collections on archive.org:
     - **prelinger**: Rick Prelinger's archive of ephemeral films
       (industrial, educational, advertising, 1920s-1980s). The single
       best source of documentary-grade B-roll for 20th century themes.
-    - **opensource_movies**: broader public-domain and CC-licensed film
-      uploads — a grab bag but useful when Prelinger is thin on a topic.
     - **home_movies**: anonymous personal footage. The soul of any
       nostalgic or observational documentary montage lives here.
 
-Archive.org requires no API key. Everything is open.
+Archive.org requires no API key.
 
 Fetch pattern
 -------------
@@ -27,10 +25,9 @@ expected to probe the clip with ffprobe post-download.
 
 Licence
 -------
-Prelinger collection items are public domain. Broader
-`opensource_movies` items are usually CC0 or CC-BY. We record the
-collection and `licenseurl` (when present) so the agent can attribute
-correctly if it wants to, but no attribution is legally required.
+Prelinger collection items are public domain. We record the collection
+and `licenseurl` (when present) so the agent can attribute correctly
+when required.
 """
 from __future__ import annotations
 
@@ -48,7 +45,7 @@ _DOWNLOAD_URL = "https://archive.org/download"
 # Default collections to bias toward. Overridable via SearchFilters.extra
 # in a future refinement; for now these are baked in because they give
 # the best documentary-montage hit rate.
-_DEFAULT_COLLECTIONS = ("prelinger", "opensource_movies", "home_movies")
+_DEFAULT_COLLECTIONS = ("prelinger", "home_movies")
 
 # File formats we accept, in preference order. Archive.org runs every
 # upload through a derivative pipeline so most items have multiple
@@ -538,8 +535,8 @@ def _to_text(value: Any) -> str:
 def _license_from_collection(collection: str) -> str:
     """Infer licence text from a collection name when no licenseurl is set.
 
-    Prelinger items are universally public domain; broader opensource
-    collections usually are too but we're less sure, so we hedge.
+    Prelinger items are universally public domain; broader collections
+    vary, so we hedge.
     """
     col = collection.lower()
     if "prelinger" in col:

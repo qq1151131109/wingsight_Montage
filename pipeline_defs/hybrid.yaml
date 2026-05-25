@@ -3,7 +3,7 @@ version: "2.0"
 description: >
   Hybrid pipeline for videos that combine source footage with designed or generated support
   assets: interviews plus diagrams, product footage plus overlays, screen recordings plus
-  companion graphics, or montage edits with support inserts. EP orchestration adds quality
+  wingsight_montage graphics, or montage edits with support inserts. EP orchestration adds quality
   gates for source/support balance, overlay density, and cross-medium coherence.
 category: hybrid
 stability: production

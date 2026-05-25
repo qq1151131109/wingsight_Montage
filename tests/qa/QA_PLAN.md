@@ -41,7 +41,7 @@ For each output:
 ## Run Order
 
 ```bash
-cd C:/Users/ishan/Documents/OpenMontage
+cd C:/Users/ishan/Documents/wingsight_montage
 
 # Phase 1: Individual tools (can run in parallel)
 python tests/qa/test_01_tts.py

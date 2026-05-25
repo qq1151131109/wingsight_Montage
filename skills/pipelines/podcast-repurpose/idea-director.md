@@ -2,7 +2,7 @@
 
 ## When To Use
 
-Use this pipeline when the source is a podcast episode, either audio-only or video podcast, and the user wants clips, social assets, or a companion long-form video treatment.
+Use this pipeline when the source is a podcast episode, either audio-only or video podcast, and the user wants clips, social assets, or a wingsight_montage long-form video treatment.
 
 Your first responsibility is to decide what is feasible from the source that actually exists.
 
@@ -44,7 +44,7 @@ Safe options:
 - short-form highlight clips,
 - audiogram or caption-led clips,
 - quote-led clips,
-- one optional full-episode companion layout.
+- one optional full-episode wingsight_montage layout.
 
 Do not assume a high-production full-episode YouTube treatment unless the source video, branding assets, and optional imagery actually exist.
 
@@ -54,13 +54,13 @@ Typical starting point:
 
 - `3-5` highlight clips
 - `1-3` quote-led assets if the episode has strong one-liners
-- optional long-form companion if the source justifies it
+- optional long-form wingsight_montage if the source justifies it
 
 ### 4. Respect Platform Differences
 
 - `9:16` for Shorts, Reels, TikTok
 - `1:1` for LinkedIn and safer feed repurposing
-- `16:9` for YouTube companion video
+- `16:9` for YouTube wingsight_montage video
 
 If the source is audio-only, make that explicit in the brief. Downstream stages should not plan speaker-framed video that does not exist.
 
@@ -76,7 +76,7 @@ Use `brief.metadata` for the richer podcast-specific contract:
 - `conversation_format`
 - `deliverable_mix`
 - `brand_assets_available`
-- `full_episode_companion_feasible`
+- `full_episode_wingsight_montage_feasible`
 
 ### 6. Quality Gate
 

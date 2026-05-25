@@ -29,7 +29,7 @@ Priority order:
 
 1. short highlight clips
 2. quote-led clips
-3. optional long-form companion video
+3. optional long-form wingsight_montage video
 
 This keeps the most publishable assets available first.
 
@@ -44,7 +44,7 @@ This keeps the most publishable assets available first.
 
 - `9:16` for short-form social
 - `1:1` for quote-led or feed-safe clips
-- `16:9` for long-form YouTube companion output
+- `16:9` for long-form YouTube wingsight_montage output
 
 ### 4. Verify Every Deliverable
 
@@ -67,5 +67,5 @@ Recommended metadata keys:
 ## Common Pitfalls
 
 - Letting visual treatments degrade audio quality.
-- Rendering the full companion first and delaying the clips that matter most.
+- Rendering the full wingsight_montage first and delaying the clips that matter most.
 - Forgetting that a simple, readable clip beats a technically elaborate but confusing one.

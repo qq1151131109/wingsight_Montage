@@ -2,7 +2,7 @@
 
 ## When To Use
 
-This stage creates the actual timeline logic for short clips and any optional full-episode companion asset. The audio remains the primary content.
+This stage creates the actual timeline logic for short clips and any optional full-episode wingsight_montage asset. The audio remains the primary content.
 
 ## Prerequisites
 
@@ -29,7 +29,7 @@ For short-form clips:
 - audiogram clips should emphasize captions, speaker identity, and pacing,
 - quote-led clips should preserve enough reading time after the line lands.
 
-### 3. Keep Full-Episode Companion Simple
+### 3. Keep Full-Episode wingsight_montage Simple
 
 If producing one:
 
@@ -51,10 +51,10 @@ Recommended metadata keys:
 - every short clip hooks quickly,
 - captions and attribution are present,
 - quote-led clips hold long enough to read,
-- the long-form companion stays editorially honest and technically feasible.
+- the long-form wingsight_montage stays editorially honest and technically feasible.
 
 ## Common Pitfalls
 
 - Building generic audiograms that ignore who is speaking.
 - Ending quote clips as soon as the audio ends, before the text can be read.
-- Turning a long-form companion into a weak imitation of a fully produced video podcast.
+- Turning a long-form wingsight_montage into a weak imitation of a fully produced video podcast.

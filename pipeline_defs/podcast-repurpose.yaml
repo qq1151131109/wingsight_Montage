@@ -3,7 +3,7 @@ version: "2.0"
 description: >
   Podcast-to-video repurposing pipeline. Takes podcast audio (or video podcast) and
   produces visual content: audiogram or caption-led clips, quote-led social assets,
-  and optional full-episode companion video when the source and asset budget support it.
+  and optional full-episode wingsight_montage video when the source and asset budget support it.
   EP orchestration adds quality gates for audio preservation, clip selection, and
   multi-deliverable consistency.
 category: custom
@@ -56,7 +56,7 @@ stages:
     human_approval_default: true
     review_focus:
       - Source podcast format identified (solo, interview, panel)
-      - Output types specified (audiogram clips, quote-led clips, companion video)
+      - Output types specified (audiogram clips, quote-led clips, wingsight_montage video)
       - Platform targets and clip count realistic
     success_criteria:
       - Schema-valid brief artifact
@@ -103,7 +103,7 @@ stages:
     review_focus:
       - Visual treatment planned for each segment (source video, caption-led, quote-led, audiogram)
       - Highlight clips have strong standalone hooks
-      - Full episode companion stays feasible with available source assets
+      - Full episode wingsight_montage stays feasible with available source assets
     success_criteria:
       - Schema-valid scene_plan artifact
       - Every deliverable (clips + full episode) has a scene plan
@@ -155,7 +155,7 @@ stages:
     review_focus:
       - Clip openings land quickly and attribution is clear
       - Quote cards and captions appear at the right moments
-      - Full-episode companion uses light-touch visuals instead of fake complexity
+      - Full-episode wingsight_montage uses light-touch visuals instead of fake complexity
     success_criteria:
       - Schema-valid edit_decisions artifact
       - Edit decisions cover all planned deliverables

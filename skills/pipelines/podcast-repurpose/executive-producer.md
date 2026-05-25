@@ -4,7 +4,7 @@
 
 You are the **Executive Producer (EP)** for a podcast repurpose project. You orchestrate the pipeline serially with quality gates focused on **audio preservation, clip selection quality, multi-deliverable consistency, and posting readiness**.
 
-**No pre-production stages.** Source audio/video exists. The EP manages the complexity of extracting multiple deliverables (clips, quote cards, companion video) from a single source.
+**No pre-production stages.** Source audio/video exists. The EP manages the complexity of extracting multiple deliverables (clips, quote cards, wingsight_montage video) from a single source.
 
 ## Prerequisites
 
@@ -26,7 +26,7 @@ EP_STATE:
 
   # Podcast-specific
   source_format: null          # solo / interview / panel
-  deliverable_types: []        # audiogram_clips / quote_clips / companion_video
+  deliverable_types: []        # audiogram_clips / quote_clips / wingsight_montage_video
   clip_count_target: 0
   speaker_count: 0
 
@@ -69,8 +69,8 @@ CHECK: Clip standalone quality
   - Does each clip have a strong opening hook?
   - Are visual treatments appropriate (audiogram vs quote-led vs caption-led)?
 
-CHECK: Companion video feasibility
-  - If companion video planned: is it light-touch (not over-produced)?
+CHECK: wingsight_montage video feasibility
+  - If wingsight_montage video planned: is it light-touch (not over-produced)?
   - Does chapter structure align with topic transitions?
 ```
 
@@ -98,7 +98,7 @@ CHECK: Deliverable consistency
 ### After COMPOSE stage:
 ```
 CHECK: Multi-deliverable validation
-  - All planned deliverables rendered (clips + companion if planned)?
+  - All planned deliverables rendered (clips + wingsight_montage if planned)?
   - Each clip meets platform specs (resolution, aspect ratio)?
   - Audio quality preserved from original podcast?
   - Waveform/motion treatments correct per layout?
@@ -110,7 +110,7 @@ CHECK: Multi-deliverable validation
 |------|-------------|---------------|-------------|
 | G1 | idea | Source format, deliverable types | Revise |
 | G2 | script | Transcript quality, highlights | Revise |
-| G3 | scene_plan | Clip quality, companion feasibility | Revise |
+| G3 | scene_plan | Clip quality, wingsight_montage feasibility | Revise |
 | G4 | assets | Audio preservation, subtitles, budget | Revise |
 | G5 | edit | Clip hooks, deliverable consistency | Revise |
 | G6 | compose | Multi-deliverable probe, audio quality | Revise or send-back |
@@ -131,5 +131,5 @@ CHECK: Multi-deliverable validation
 
 - **Degrading source audio**: The podcast audio is the product. Never re-encode at lower quality.
 - **Context-dependent clips**: Every clip must stand alone. Test: would a stranger understand this clip?
-- **Over-producing companion video**: Full-episode companion should be light-touch — waveforms, captions, topic graphics. Not a feature film.
+- **Over-producing wingsight_montage video**: Full-episode wingsight_montage should be light-touch — waveforms, captions, topic graphics. Not a feature film.
 - **Inconsistent clip styling**: All clips from one episode should look like they belong together.

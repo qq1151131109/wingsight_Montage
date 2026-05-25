@@ -173,7 +173,7 @@ class CapRecorder(BaseTool):
 
     dependencies = []  # No hard dependencies — detection is graceful
     install_instructions = (
-        "Cap is a free, open-source Loom alternative.\n\n"
+        "Cap is a local screen recording backend.\n\n"
         "Install from: https://cap.so/download\n"
         "  - Windows: Download and run the installer\n"
         "  - macOS: Download the .dmg or use: brew install --cask cap\n"

@@ -25,7 +25,7 @@ Prefer a source-faithful hierarchy:
 
 ### 2. Avoid Pretend Complexity
 
-Do not plan a full episode with endless generated topic art unless the budget and tools support it. A clean branded companion layout is better than a noisy, underpowered pseudo-production.
+Do not plan a full episode with endless generated topic art unless the budget and tools support it. A clean branded wingsight_montage layout is better than a noisy, underpowered pseudo-production.
 
 ### 3. Define Scene Families
 
@@ -45,7 +45,7 @@ Recommended `scene_plan.metadata` keys:
 - `speaker_card_rules`
 - `quote_card_rules`
 - `audiogram_rules`
-- `full_episode_companion_rules`
+- `full_episode_wingsight_montage_rules`
 
 ### 5. Plan Safe Zones And Attribution
 
@@ -61,7 +61,7 @@ Every layout should clearly preserve:
 - each deliverable has a treatment that matches the actual source,
 - source video is used when it exists instead of being hidden behind generic graphics,
 - audio-only assets remain visually simple and readable,
-- long-form companion visuals are achievable.
+- long-form wingsight_montage visuals are achievable.
 
 ## Common Pitfalls
 

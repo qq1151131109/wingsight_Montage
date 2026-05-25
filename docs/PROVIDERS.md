@@ -1,6 +1,6 @@
-# OpenMontage Provider Guide
+# wingsight_montage Provider Guide
 
-Everything you need to know about every provider in OpenMontage — setup instructions, pricing, free tiers, and what each unlocks.
+Everything you need to know about every provider in wingsight_montage — setup instructions, pricing, free tiers, and what each unlocks.
 
 ---
 
@@ -91,7 +91,7 @@ Current xAI docs pricing for the Grok media models:
 | `grok-imagine-video` at 720p | $0.07/sec |
 | `grok-imagine-video` input images | $0.002 per input image |
 
-OpenMontage now uses those published rates in the Grok tool estimators.
+wingsight_montage now uses those published rates in the Grok tool estimators.
 
 ---
 
@@ -182,7 +182,7 @@ No subscription — pure pay-as-you-go, no minimum spend.
 
 #### API Notes
 
-OpenMontage uses the new-console API key flow:
+wingsight_montage uses the new-console API key flow:
 
 ```text
 X-Api-Key: ${DOUBAO_SPEECH_API_KEY}
@@ -204,7 +204,7 @@ Start with `speech_rate: 0` for natural Mandarin delivery. If the approved forma
 
 #### Pricing
 
-Doubao Speech 2.0 is billed by character package or usage in Volcengine. OpenMontage estimates cost from text length and prefers provider-returned usage metadata when available.
+Doubao Speech 2.0 is billed by character package or usage in Volcengine. wingsight_montage estimates cost from text length and prefers provider-returned usage metadata when available.
 
 ---
 
@@ -568,7 +568,7 @@ ffmpeg -version
 npx --yes hyperframes doctor
 ```
 
-The CLI is consumed as `npx hyperframes`. Do not use `npx @hyperframes/cli`; that package name is not the OpenMontage runtime path.
+The CLI is consumed as `npx hyperframes`. Do not use `npx @hyperframes/cli`; that package name is not the wingsight_montage runtime path.
 
 #### What HyperFrames Renders
 
@@ -579,7 +579,7 @@ The CLI is consumed as `npx hyperframes`. Do not use `npx @hyperframes/cli`; tha
 | **Website-to-video** | Browser-captured site compositions with HyperFrames validation |
 | **Character animation** | SVG character rigs, pose/action timelines, and GSAP acting beats rendered to `renders/final.mp4` |
 
-HyperFrames workspaces live under `projects/<project-name>/hyperframes/`. Final videos still follow the normal OpenMontage convention: `projects/<project-name>/renders/final.mp4`.
+HyperFrames workspaces live under `projects/<project-name>/hyperframes/`. Final videos still follow the normal wingsight_montage convention: `projects/<project-name>/renders/final.mp4`.
 
 **Cost:** Free. Always local.
 

@@ -2,7 +2,7 @@
 
 ## When To Use
 
-Package podcast-derived clips and companion assets so that every short-form piece points back to the episode instead of drifting as an isolated fragment.
+Package podcast-derived clips and wingsight_montage assets so that every short-form piece points back to the episode instead of drifting as an isolated fragment.
 
 ## Prerequisites
 
@@ -27,7 +27,7 @@ Each short-form asset should reference:
 
 - Shorts / Reels / TikTok: hook-led and concise
 - LinkedIn: insight-led and more contextual
-- YouTube companion: chapter-rich and search-friendly
+- YouTube wingsight_montage: chapter-rich and search-friendly
 
 ### 3. Sequence The Release
 

@@ -39,7 +39,7 @@ This prevents the most expensive mistake: generating 10+ assets in a direction t
 Generated graphics should support the batch, not dominate it. Use them only when:
 
 - the topic truly benefits from a clarifying image,
-- the episode companion needs chapter separation,
+- the episode wingsight_montage needs chapter separation,
 - the budget can support consistent outputs.
 
 ### 3. Use Templates, Not Reinvention
@@ -83,7 +83,7 @@ the AI model's training data — it may be wrong or outdated.
 
 - Spending budget on optional art before subtitles and attribution assets are complete.
 - Creating inconsistent speaker cards across the same episode.
-- Overproducing topic graphics for long-form companion videos.
+- Overproducing topic graphics for long-form wingsight_montage videos.
 
 
 ## When You Do Not Know How

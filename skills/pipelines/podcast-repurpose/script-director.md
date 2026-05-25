@@ -50,7 +50,7 @@ Every highlight should be evaluated for:
 
 ### 4. Build Chapters For Long-Form Packaging
 
-If the user wants a full-episode companion asset, identify the topic shifts now. These become chapter markers and later visual transition points.
+If the user wants a full-episode wingsight_montage asset, identify the topic shifts now. These become chapter markers and later visual transition points.
 
 ### 5. Keep The Schema Clean
 

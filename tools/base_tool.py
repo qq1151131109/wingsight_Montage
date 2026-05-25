@@ -1,6 +1,6 @@
 """Base tool class implementing the expanded ToolContract.
 
-Every tool in OpenMontage inherits from BaseTool. This enforces a uniform
+Every tool in wingsight_montage inherits from BaseTool. This enforces a uniform
 interface for discovery, execution, cost estimation, and health reporting.
 """
 
@@ -37,13 +37,16 @@ def _load_dotenv() -> None:
                 continue
             key, _, value = line.partition("=")
             key = key.strip()
-            value = value.strip().strip("'\"")
+            value = value.strip()
+            if value.startswith("#"):
+                value = ""
             # Strip inline comments: VAR=value  # comment
             # But only if the # is preceded by whitespace (avoid stripping from values like colors)
-            if "  #" in value:
-                value = value[:value.index("  #")].rstrip()
+            elif " #" in value:
+                value = value[:value.index(" #")].rstrip()
             elif "\t#" in value:
                 value = value[:value.index("\t#")].rstrip()
+            value = value.strip().strip("'\"")
             if key and key not in os.environ:
                 os.environ[key] = value
 
@@ -130,7 +133,7 @@ class ToolResult:
 
 
 class BaseTool(ABC):
-    """Abstract base class for all OpenMontage tools."""
+    """Abstract base class for all wingsight_montage tools."""
 
     # --- Identity (override in subclasses) ---
     name: str = ""
@@ -148,7 +151,7 @@ class BaseTool(ABC):
 
     # --- Capabilities ---
     capability: str = "generic"
-    provider: str = "openmontage"
+    provider: str = "wingsight_montage"
     capabilities: list[str] = []
     input_schema: dict = {}
     output_schema: dict = {}

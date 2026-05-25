@@ -53,7 +53,7 @@ def _scrub_unicode_dashes(value: Any) -> Any:
 
 
 class ToolRegistry:
-    """Central registry of all OpenMontage tools."""
+    """Central registry of all wingsight_montage tools."""
 
     def __init__(self) -> None:
         self._tools: dict[str, BaseTool] = {}
@@ -86,21 +86,9 @@ class ToolRegistry:
     @staticmethod
     def _load_dotenv() -> None:
         """Load .env file into os.environ if present, so tools can find API keys."""
-        from pathlib import Path
-        import os
-        env_path = Path(__file__).resolve().parent.parent / ".env"
-        if not env_path.is_file():
-            return
-        with open(env_path, encoding="utf-8", errors="ignore") as f:
-            for line in f:
-                line = line.strip()
-                if not line or line.startswith("#") or "=" not in line:
-                    continue
-                key, _, value = line.partition("=")
-                key = key.strip()
-                value = value.strip().strip("'\"")
-                if key and key not in os.environ:
-                    os.environ[key] = value
+        from tools.base_tool import _load_dotenv
+
+        _load_dotenv()
 
     def discover(self, package_name: str = "tools") -> list[str]:
         """Import a package tree and register any concrete tools it defines."""

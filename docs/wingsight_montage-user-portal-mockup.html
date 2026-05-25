@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>wingsight_montage Context File Tree Mockup</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #fafafa;
+      --panel: #ffffff;
+      --panel-soft: #f5f5f4;
+      --text: #1f1f1f;
+      --muted: #71717a;
+      --line: #e5e5e5;
+      --line-strong: #d4d4d4;
+      --accent: #2563eb;
+      --accent-soft: #eff6ff;
+      --green: #16803c;
+      --shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      height: 100vh;
+      min-height: 720px;
+      display: grid;
+      grid-template-columns: 58px minmax(460px, 1fr) 340px;
+      overflow: hidden;
+    }
+
+    .rail {
+      border-right: 1px solid var(--line);
+      background: #fbfbfb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 8px;
+    }
+
+    .logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      background: #18181b;
+      color: white;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .rail-btn {
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: #52525b;
+    }
+
+    .rail-btn.active,
+    .rail-btn:hover {
+      background: var(--panel-soft);
+      color: var(--text);
+    }
+
+    .main {
+      min-width: 0;
+      display: grid;
+      grid-template-rows: 54px 1fr auto;
+      background: var(--panel);
+    }
+
+    .topbar {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .session-title {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+    }
+
+    .session-title span {
+      min-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .status {
+      color: var(--muted);
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--green);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn {
+      min-height: 30px;
+      border: 1px solid var(--line-strong);
+      background: white;
+      color: var(--text);
+      border-radius: 7px;
+      padding: 0 10px;
+      font-size: 12px;
+    }
+
+    .btn:hover {
+      border-color: #a1a1aa;
+      background: #fafafa;
+    }
+
+    .btn.primary {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: white;
+    }
+
+    .transcript {
+      min-height: 0;
+      overflow: auto;
+      padding: 26px 22px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .thread {
+      width: min(820px, 100%);
+      display: grid;
+      align-content: start;
+      gap: 18px;
+    }
+
+    .message {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: #f4f4f5;
+      color: #52525b;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .message.user .avatar {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .bubble {
+      padding-top: 5px;
+      line-height: 1.55;
+    }
+
+    .bubble strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 13px;
+    }
+
+    .bubble p {
+      margin: 0 0 8px;
+    }
+
+    .bubble code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      background: #f4f4f5;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      padding: 2px 5px;
+    }
+
+    .composer-wrap {
+      border-top: 1px solid var(--line);
+      padding: 14px 18px 18px;
+      background: var(--panel);
+      display: flex;
+      justify-content: center;
+    }
+
+    .composer {
+      width: min(820px, 100%);
+      border: 1px solid var(--line-strong);
+      border-radius: 12px;
+      background: white;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    textarea {
+      width: 100%;
+      height: 86px;
+      border: 0;
+      outline: 0;
+      resize: none;
+      padding: 13px 14px;
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    .composer-bar {
+      height: 42px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      background: #fbfbfb;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .context {
+      min-width: 0;
+      border-left: 1px solid var(--line);
+      background: #fbfbfb;
+      display: grid;
+      grid-template-rows: 54px 1fr;
+    }
+
+    .context-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      border-bottom: 1px solid var(--line);
+      font-weight: 600;
+    }
+
+    .context-body {
+      min-height: 0;
+      overflow: auto;
+      padding: 12px;
+    }
+
+    .context-section {
+      border-bottom: 1px solid var(--line);
+      padding: 12px 2px;
+    }
+
+    .context-section:first-child {
+      padding-top: 0;
+    }
+
+    .context-row {
+      min-height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 6px;
+      border-radius: 7px;
+      color: var(--text);
+    }
+
+    .context-row:hover {
+      background: #f1f5f9;
+    }
+
+    .row-main {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .row-label {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .count {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .link {
+      border: 0;
+      padding: 0;
+      background: transparent;
+      color: var(--accent);
+      font-size: 12px;
+    }
+
+    .empty {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+      padding: 5px 6px 2px;
+    }
+
+    .files-card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: white;
+      overflow: hidden;
+      margin-bottom: 12px;
+      display: grid;
+      grid-template-rows: 40px minmax(340px, 52vh);
+    }
+
+    .files-head {
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 0 10px;
+      border-bottom: 1px solid var(--line);
+      font-weight: 600;
+    }
+
+    .files-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .icon-btn {
+      width: 26px;
+      height: 26px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fff;
+      color: #52525b;
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+    }
+
+    .icon-btn:hover {
+      background: #f8fafc;
+      color: var(--text);
+    }
+
+    .file-tree {
+      min-height: 340px;
+      max-height: 52vh;
+      overflow: auto;
+      padding: 6px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+    }
+
+    .file-node {
+      width: 100%;
+      min-height: 28px;
+      border: 0;
+      border-radius: 7px;
+      background: transparent;
+      color: #27272a;
+      display: grid;
+      grid-template-columns: 18px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 6px;
+      padding: 0 6px;
+      text-align: left;
+    }
+
+    .file-node:hover,
+    .file-node.active {
+      background: var(--accent-soft);
+      color: #1d4ed8;
+    }
+
+    .file-node.selected {
+      background: #eef2ff;
+      color: #1d4ed8;
+    }
+
+    .file-name {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .file-tag {
+      color: var(--muted);
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 10px;
+    }
+
+    .indent-1 { padding-left: 20px; }
+    .indent-2 { padding-left: 36px; }
+    .indent-3 { padding-left: 52px; }
+
+    .upload-input {
+      display: none;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%) translateY(12px);
+      opacity: 0;
+      pointer-events: none;
+      background: #18181b;
+      color: white;
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 12px;
+      transition: opacity 160ms ease, transform 160ms ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 980px) {
+      .app {
+        grid-template-columns: 52px 1fr;
+      }
+
+      .context {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <nav class="rail" aria-label="wingsight_montage navigation">
+      <div class="logo">C</div>
+      <button class="rail-btn active" title="Sessions">S</button>
+      <button class="rail-btn" title="Search">Q</button>
+      <button class="rail-btn" title="Settings">G</button>
+    </nav>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="session-title">
+          <span>wingsight_montage user session</span>
+          <div class="status"><i class="dot"></i> Codex · /wingsight_Montage</div>
+        </div>
+        <div class="top-actions">
+          <button class="btn">New Session</button>
+          <button class="btn primary">Resume</button>
+        </div>
+      </header>
+
+      <section class="transcript" aria-label="Session transcript">
+        <div class="thread">
+          <article class="message">
+            <div class="avatar">OM</div>
+            <div class="bubble">
+              <strong>wingsight_montage</strong>
+              <p>我可以帮你分析参考图或参考视频，然后按流程生成短视频。图片/视频请优先从右侧 Context 的 Files 上传，再把路径插入消息。</p>
+            </div>
+          </article>
+
+          <article class="message user">
+            <div class="avatar">U</div>
+            <div class="bubble">
+              <strong>User</strong>
+              <p>参考视频：<code>projects/uploads/reference-launch.mp4</code></p>
+              <p>先分析它的节奏、镜头和字幕风格。</p>
+            </div>
+          </article>
+
+          <article class="message">
+            <div class="avatar">OM</div>
+            <div class="bubble">
+              <strong>wingsight_montage</strong>
+              <p>可以。我会先把它作为参考视频处理，只做分析，不直接生成。分析完成后再给你 2-3 个可选方向。</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="composer-wrap">
+        <div class="composer">
+          <textarea id="composer">把 @projects/uploads/product-angle.png 做成 @projects/uploads/color-mood.jpg 的风格</textarea>
+          <div class="composer-bar">
+            <span class="hint">从右侧 Files 多选文件，一键 @、复制或下载</span>
+            <button class="btn primary" id="sendBtn">Send</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <aside class="context" aria-label="Context sidebar">
+      <header class="context-head">
+        <span>Context</span>
+        <button class="btn">Edit</button>
+      </header>
+
+      <div class="context-body">
+        <section class="files-card">
+          <div class="files-head">
+            <span>Files <span class="count" id="selectedCount">1</span></span>
+            <div class="files-actions">
+              <button class="icon-btn" id="uploadBtn" title="Upload">+</button>
+              <button class="icon-btn" id="downloadBtn" title="Download">↓</button>
+              <button class="icon-btn" id="mentionBtn" title="@ selected files">@</button>
+              <button class="icon-btn" id="copyPathBtn" title="Copy paths">⧉</button>
+              <button class="icon-btn" id="refreshBtn" title="Refresh">R</button>
+              <input class="upload-input" id="uploadInput" type="file" accept="image/*,video/*,audio/*" multiple />
+            </div>
+          </div>
+
+          <div class="file-tree" id="fileTree">
+            <button class="file-node" data-path="projects" data-type="folder"><span>▾</span><span class="file-name">projects</span><span class="file-tag">root</span></button>
+            <button class="file-node indent-1" data-path="projects/uploads" data-type="folder"><span>▾</span><span class="file-name">uploads</span><span class="file-tag">drop</span></button>
+            <button class="file-node indent-2" data-path="projects/uploads/reference-launch.mp4" data-type="video"><span>▶</span><span class="file-name">reference-launch.mp4</span><span class="file-tag">mp4</span></button>
+            <button class="file-node indent-2 active" data-path="projects/uploads/product-angle.png" data-type="image"><span>◼</span><span class="file-name">product-angle.png</span><span class="file-tag">png</span></button>
+            <button class="file-node indent-2" data-path="projects/uploads/color-mood.jpg" data-type="image"><span>◼</span><span class="file-name">color-mood.jpg</span><span class="file-tag">jpg</span></button>
+            <button class="file-node indent-1" data-path="projects/demo-renders" data-type="folder"><span>▾</span><span class="file-name">demo-renders</span><span class="file-tag">out</span></button>
+            <button class="file-node indent-2" data-path="projects/demo-renders/renders/final.mp4" data-type="video"><span>▶</span><span class="file-name">final.mp4</span><span class="file-tag">final</span></button>
+          </div>
+        </section>
+
+        <section class="context-section">
+          <div class="context-row">
+            <div class="row-main"><span>▣</span><span class="row-label">Project</span></div>
+            <span class="count">(1)</span>
+          </div>
+          <div class="context-row">
+            <div class="row-main"><span>◉</span><span class="row-label">User</span></div>
+            <span class="count">(2)</span>
+          </div>
+          <div class="context-row">
+            <div class="row-main"><span>▤</span><span class="row-label">Usage Limits</span></div>
+          </div>
+          <div class="context-row">
+            <div class="row-main"><span>⑂</span><span class="row-label">Git Branch</span></div>
+          </div>
+        </section>
+
+        <section class="context-section">
+          <div class="context-row">
+            <div class="row-main"><span>⌁</span><span class="row-label">GitHub PR</span></div>
+          </div>
+          <div class="context-row">
+            <div class="row-main"><span>□</span><span class="row-label">Linear Issue</span></div>
+            <button class="link">Link Linear issue</button>
+          </div>
+        </section>
+
+        <section class="context-section">
+          <div class="context-row">
+            <div class="row-main"><span>◇</span><span class="row-label">MCP Servers</span></div>
+            <span class="count">MCP Servers</span>
+          </div>
+          <div class="empty">No MCP servers configured. <button class="link">Add one</button></div>
+        </section>
+      </div>
+    </aside>
+  </div>
+
+  <div class="toast" id="toast">Copied</div>
+
+  <script>
+    const state = {
+      activePath: "projects/uploads/product-angle.png",
+      selected: ["projects/uploads/product-angle.png"]
+    };
+
+    const fileTree = document.getElementById("fileTree");
+    const selectedCount = document.getElementById("selectedCount");
+    const composer = document.getElementById("composer");
+    const toast = document.getElementById("toast");
+
+    function showToast(text) {
+      toast.textContent = text;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 1200);
+    }
+
+    function renderSelection() {
+      selectedCount.textContent = String(state.selected.length);
+      document.querySelectorAll(".file-node").forEach((node) => {
+        node.classList.toggle("active", node.dataset.path === state.activePath);
+        node.classList.toggle("selected", state.selected.includes(node.dataset.path));
+      });
+    }
+
+    function togglePath(path, type) {
+      state.activePath = path;
+      if (type === "folder") {
+        renderSelection();
+        return;
+      }
+      if (state.selected.includes(path)) {
+        state.selected = state.selected.filter((item) => item !== path);
+      } else {
+        state.selected.push(path);
+      }
+      renderSelection();
+    }
+
+    function selectedPaths() {
+      return state.selected.length ? state.selected : [state.activePath];
+    }
+
+    fileTree.addEventListener("click", (event) => {
+      const node = event.target.closest(".file-node");
+      if (!node) return;
+      togglePath(node.dataset.path, node.dataset.type);
+    });
+
+    document.getElementById("mentionBtn").addEventListener("click", () => {
+      const mentions = selectedPaths().map((path) => `@${path}`).join(" ");
+      composer.value = composer.value.trim()
+        ? `${composer.value.trim()} ${mentions}`
+        : mentions;
+      showToast("Inserted @files");
+    });
+
+    document.getElementById("copyPathBtn").addEventListener("click", async () => {
+      await navigator.clipboard.writeText(selectedPaths().join("\n"));
+      showToast("Paths copied");
+    });
+
+    document.getElementById("downloadBtn").addEventListener("click", () => {
+      const count = selectedPaths().length;
+      showToast(count > 1 ? "Mockup: download selected files" : "Mockup: download file");
+    });
+
+    document.getElementById("uploadBtn").addEventListener("click", () => {
+      document.getElementById("uploadInput").click();
+    });
+
+    document.getElementById("uploadInput").addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+      const path = `projects/uploads/${file.name}`;
+      const ext = file.name.split(".").pop() || "file";
+      const icon = file.type.startsWith("video/") ? "▶" : file.type.startsWith("image/") ? "◼" : "◇";
+      const button = document.createElement("button");
+      button.className = "file-node indent-2 active";
+      button.dataset.path = path;
+      button.dataset.type = file.type || "file";
+      button.innerHTML = `<span>${icon}</span><span class="file-name">${file.name}</span><span class="file-tag">${ext}</span>`;
+      const anchor = fileTree.children[5];
+      fileTree.insertBefore(button, anchor);
+      state.activePath = path;
+      state.selected = [path];
+      renderSelection();
+      showToast("Added to files");
+    });
+
+    document.getElementById("refreshBtn").addEventListener("click", () => {
+      showToast("Files refreshed");
+    });
+
+    document.getElementById("sendBtn").addEventListener("click", () => {
+      showToast("Mockup only");
+    });
+
+    renderSelection();
+  </script>
+</body>
+</html>

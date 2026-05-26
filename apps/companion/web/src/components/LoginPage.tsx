@@ -13,7 +13,7 @@ export function LoginPage() {
       e.preventDefault();
       const trimmed = token.trim();
       if (!trimmed) {
-        setError("Please enter a token");
+        setError("请输入访问口令");
         return;
       }
       setLoading(true);
@@ -22,7 +22,7 @@ export function LoginPage() {
       if (valid) {
         setAuthToken(trimmed);
       } else {
-        setError("Invalid token");
+        setError("访问口令无效");
       }
       setLoading(false);
     },
@@ -51,7 +51,7 @@ export function LoginPage() {
             url.searchParams.delete("token");
             window.history.replaceState({}, "", url.toString());
           } else {
-            setError("Invalid token from URL");
+            setError("链接中的访问口令无效");
             setLoading(false);
           }
         });
@@ -65,14 +65,14 @@ export function LoginPage() {
     <div className="h-[100dvh] flex items-center justify-center bg-cc-bg text-cc-fg font-sans-ui antialiased">
       <div className="w-full max-w-sm px-6">
         <div className="text-center mb-8">
-          <h1 className="text-xl font-semibold text-cc-fg mb-2">The Companion</h1>
-          <p className="text-sm text-cc-muted">Enter your auth token to continue</p>
+          <h1 className="text-xl font-semibold text-cc-fg mb-2">WingSight_Agent</h1>
+          <p className="text-sm text-cc-muted">正在连接 WingSight_Agent</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="auth-token" className="block text-xs text-cc-muted mb-1.5">
-              Auth Token
+              访问口令
             </label>
             <div className="relative">
               <input
@@ -83,7 +83,7 @@ export function LoginPage() {
                   setToken(e.target.value);
                   setError(null);
                 }}
-                placeholder="Paste your token here"
+                placeholder="如需口令，请联系管理员"
                 className="w-full px-3 py-2 pr-16 text-sm bg-cc-hover border border-cc-border rounded-md text-cc-fg placeholder:text-cc-muted/50 focus:outline-none focus:ring-1 focus:ring-cc-primary focus:border-cc-primary font-mono"
                 autoComplete="off"
                 disabled={loading}
@@ -94,7 +94,7 @@ export function LoginPage() {
                 className="absolute right-2 top-1/2 -translate-y-1/2 text-[11px] text-cc-muted hover:text-cc-fg transition-colors cursor-pointer px-1.5 py-0.5 rounded hover:bg-cc-hover"
                 tabIndex={-1}
               >
-                {showToken ? "Hide" : "Show"}
+                {showToken ? "隐藏" : "显示"}
               </button>
             </div>
           </div>
@@ -108,13 +108,12 @@ export function LoginPage() {
             disabled={loading || !token.trim()}
             className="w-full py-2 px-4 text-sm font-medium bg-cc-primary text-white rounded-md hover:opacity-90 disabled:opacity-50 transition-opacity cursor-pointer disabled:cursor-not-allowed"
           >
-            {loading ? "Verifying..." : "Login"}
+            {loading ? "正在进入..." : "进入"}
           </button>
         </form>
 
         <p className="mt-6 text-[11px] text-cc-muted text-center leading-relaxed">
-          Scan the QR code in Settings with your phone camera to authenticate,
-          or find your token in the server console.
+          如果页面停在这里，请刷新一次；局域网访问会自动进入。
         </p>
       </div>
     </div>

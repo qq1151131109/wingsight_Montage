@@ -39,6 +39,7 @@ import { restoreIfNeeded as restoreTailscaleFunnel, cleanup as cleanupTailscaleF
 import { isRunningAsService } from "./service.js";
 import { getToken, verifyToken } from "./auth-manager.js";
 import { getCookie } from "hono/cookie";
+import { isTrustedLocalAddress } from "./wingsight-user-mode.js";
 import type { SocketData } from "./ws-bridge.js";
 import type { ServerWebSocket } from "bun";
 
@@ -138,9 +139,9 @@ app.route("/api", createRoutes(orchestrator, launcher, wsBridge, terminalManager
 // so this is the only way to bridge auth across the install boundary.
 app.get("/manifest.json", (c) => {
   const manifest = {
-    name: "The Companion",
-    short_name: "Companion",
-    description: "Web UI for Claude Code and Codex",
+    name: "WingSight_Agent",
+    short_name: "WingSight",
+    description: "WingSight Agent workspace",
     start_url: "/",
     scope: "/",
     display: "standalone" as const,
@@ -162,7 +163,7 @@ app.get("/manifest.json", (c) => {
     const bunServer = c.env as { requestIP?: (req: Request) => { address: string } | null };
     const ip = bunServer?.requestIP?.(c.req.raw);
     const addr = ip?.address ?? "";
-    if (addr === "127.0.0.1" || addr === "::1" || addr === "::ffff:127.0.0.1") {
+    if (isTrustedLocalAddress(addr)) {
       manifest.start_url = `/?token=${getToken()}`;
     }
   }
@@ -197,10 +198,11 @@ const server = Bun.serve<SocketData>({
       return new Response("WebSocket upgrade failed", { status: 400 });
     }
 
-    // Helper: check if request is from localhost (same machine)
+    // Same-machine requests are always trusted; LAN requests are trusted only
+    // in WingSight user mode so public deployments still require auth.
     const reqIp = server.requestIP(req);
     const reqAddr = reqIp?.address ?? "";
-    const isLocalhost = reqAddr === "127.0.0.1" || reqAddr === "::1" || reqAddr === "::ffff:127.0.0.1";
+    const isTrustedLocal = isTrustedLocalAddress(reqAddr);
 
     // ── Browser WebSocket — connects to a specific session ─────────────
     const browserMatch = url.pathname.match(/^\/ws\/browser\/([a-f0-9-]+)$/);
@@ -212,7 +214,7 @@ const server = Bun.serve<SocketData>({
         }
       } else {
         const wsToken = url.searchParams.get("token");
-        if (!isLocalhost && !verifyToken(wsToken)) {
+        if (!isTrustedLocal && !verifyToken(wsToken)) {
           return new Response("Unauthorized", { status: 401 });
         }
       }
@@ -234,7 +236,7 @@ const server = Bun.serve<SocketData>({
         }
       } else {
         const wsToken = url.searchParams.get("token");
-        if (!isLocalhost && !verifyToken(wsToken)) {
+        if (!isTrustedLocal && !verifyToken(wsToken)) {
           return new Response("Unauthorized", { status: 401 });
         }
       }
@@ -256,7 +258,7 @@ const server = Bun.serve<SocketData>({
         }
       } else {
         const wsToken = url.searchParams.get("token");
-        if (!isLocalhost && !verifyToken(wsToken)) {
+        if (!isTrustedLocal && !verifyToken(wsToken)) {
           return new Response("Unauthorized", { status: 401 });
         }
       }

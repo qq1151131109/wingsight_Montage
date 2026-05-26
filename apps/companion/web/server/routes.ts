@@ -38,7 +38,7 @@ import { getSettings } from "./settings-manager.js";
 import { discoverClaudeSessions } from "./claude-session-discovery.js";
 import { getClaudeSessionHistoryPage } from "./claude-session-history.js";
 import { verifyToken, getToken, regenerateToken, getAllAddresses } from "./auth-manager.js";
-import { getWingsightProjectDir, isWingsightUserMode } from "./wingsight-user-mode.js";
+import { getWingsightProjectDir, isTrustedLocalAddress, isWingsightUserMode } from "./wingsight-user-mode.js";
 import QRCode from "qrcode";
 import { VSCODE_EDITOR_CONTAINER_PORT, NOVNC_CONTAINER_PORT } from "./constants.js";
 
@@ -113,14 +113,12 @@ export function createRoutes(
   // Localhost users are on the same machine as the server, so they can
   // auto-authenticate without a token. This makes first-launch seamless.
 
-  // Check if the request comes from localhost (same machine as the server).
-  // Uses Bun's requestIP which returns the actual TCP source address.
-  // Returns false in test environments where c.env is not a Bun server.
+  // Check if the request comes from the same machine, or from the LAN when
+  // WingSight user mode is enabled. Public addresses still require auth.
   function isLocalhostRequest(c: { env: unknown; req: { raw: Request } }): boolean {
     const bunServer = c.env as { requestIP?: (req: Request) => { address: string } | null };
     const ip = bunServer?.requestIP?.(c.req.raw);
-    const addr = ip?.address ?? "";
-    return addr === "127.0.0.1" || addr === "::1" || addr === "::ffff:127.0.0.1";
+    return isTrustedLocalAddress(ip?.address ?? "");
   }
 
   api.get("/auth/auto", (c) => {
